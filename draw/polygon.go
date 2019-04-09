@@ -145,15 +145,15 @@ func Polygon(surf *sdl.Surface, color *color.Color, points [][]int, border_width
 		right  = max(x,right)
 		bottom = max(y,bottom)
 	}
-
+  /*
 	err := surf.Lock()
 	if err != nil {
 		return rect.Rect(0,0,0,0)
 	}
-
+  */
 	draw_fillpoly(surf,xlist,ylist,numpoints,color)
 
-	surf.Unlock()
+	//surf.Unlock()
 
 	left = max(left,int(surf.ClipRect.X))
 	top  = max(top, int(surf.ClipRect.Y))

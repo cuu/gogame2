@@ -68,7 +68,7 @@ func Point(surf *sdl.Surface, c *color.Color, x,y int) {
 
 	color_bytes := c.ToBytes()
 
-	surf.Lock()
+	//surf.Lock()
 	
 	if bytes_per_pixel == 1 {
 		pixels[addr] = color_bytes[0]
@@ -92,5 +92,5 @@ func Point(surf *sdl.Surface, c *color.Color, x,y int) {
 		}
 	}
 	
-	surf.Unlock()
+	//surf.Unlock()
 }

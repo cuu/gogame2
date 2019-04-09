@@ -38,11 +38,12 @@ func Lines(surf *sdl.Surface, col *color.Color,closed bool, pointlist [][]int,wi
 		return rect.Rect(x,y,0,0)
 	}
 
+  /*
 	err := surf.Lock()
 	if err != nil {
 		return rect.Rect(0,0,0,0)
 	}
-
+  */
 	drawn := 1
 	for loop := 1; loop < length; loop++ {
 		item := pointlist[loop]
@@ -78,7 +79,7 @@ func Lines(surf *sdl.Surface, col *color.Color,closed bool, pointlist [][]int,wi
 		pts[3] = y
 		clip_and_draw_line_width(surf, &surf.ClipRect, col, width, pts)
 	}
-	surf.Unlock()
+	//surf.Unlock()
 
 	return rect.Rect(left,top,right-left+1, bottom-top+1)
 	
@@ -94,11 +95,12 @@ func Line(surf *sdl.Surface, col *color.Color,x1,y1,x2,y2 ,width int) sdl.Rect {
 	if width < 1 {
 		return rect.Rect(x1,y1,0,0)
 	}
-
+  /*
 	err := surf.Lock()
 	if err != nil {
 		return rect.Rect(0,0,0,0)
 	}
+  */
 	anydraw := clip_and_draw_line_width(surf,&surf.ClipRect, col, width,pts)
 	surf.Unlock()
 	if anydraw == 0 {

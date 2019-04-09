@@ -17,7 +17,7 @@ func ColorSurface(surf *sdl.Surface,col *color.Color) {
 	
 	color_bytes := col.ToBytes()
 	
-	surf.Lock()
+	//surf.Lock()
 	pixels := surf.Pixels()
 
 	for i:= 0; i< surf.PixelNum(); i++ {
@@ -26,7 +26,7 @@ func ColorSurface(surf *sdl.Surface,col *color.Color) {
 		}
 	}
 	
-	surf.Unlock()
+	//surf.Unlock()
 }
 
 
