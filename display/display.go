@@ -15,6 +15,7 @@ var window *sdl.Window
 var big_surface *sdl.Surface
 var renderer *sdl.Renderer
 var texture *sdl.Texture
+var big_surface_pixels []byte
 
 func AssertInited() {
 	if Inited == false {
@@ -114,14 +115,23 @@ func SetMode(w,h,flags,depth int32) *sdl.Surface {
     if err != nil {
       panic(err)
     }
+    
+    big_surface_pixels = big_surface.Pixels()
+    
 	})
 
 	return big_surface
 }
 
+func UpdatePixels() {
+  sdl.Do(func() {
+    texture.Update(nil,big_surface_pixels,int(big_surface.Pitch))
+  })
+}
+
 func Flip() {
 	sdl.Do(func() {
-    texture.Update(nil,big_surface.Pixels(),int(big_surface.Pitch))
+    //texture.Update(nil,big_surface_pixels,int(big_surface.Pitch))
     renderer.Clear()
     renderer.Copy(texture, nil,nil)
     renderer.Present()
