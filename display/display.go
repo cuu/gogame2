@@ -1,7 +1,7 @@
 package display
 
 import (
-    //"fmt"
+  "fmt"
 	"os"
 	
 	"github.com/veandco/go-sdl2/sdl"
@@ -12,8 +12,9 @@ import (
 
 var Inited =  false
 var window *sdl.Window
-var win_surface *sdl.Surface
 var big_surface *sdl.Surface
+var renderer *sdl.Renderer
+var texture *sdl.Texture
 
 func AssertInited() {
 	if Inited == false {
@@ -51,9 +52,9 @@ func SetWindowPos(win*sdl.Window, x,y int) {
 }
 
 func GetWindowPos(win*sdl.Window) (int,int) {
-        x,y := win.GetPosition()
+  x,y := win.GetPosition()
         
-        return int(x),int(y)
+  return int(x),int(y)
 }
 
 func SetWindowTitle(win*sdl.Window, tit string) {
@@ -78,13 +79,8 @@ func GetCurrentMode( scr_index int) (mode sdl.DisplayMode, err error) {
 
 }
 
-func GetSurface() *sdl.Surface {
-	return big_surface
-}
-
 func SetMode(w,h,flags,depth int32) *sdl.Surface {
 	var err error
-	var surf *sdl.Surface
 	AssertInited()
 	
 	sdl.Do(func() {
@@ -105,45 +101,30 @@ func SetMode(w,h,flags,depth int32) *sdl.Surface {
 		if err != nil {
 			panic(err)
 		}
-
-		surf,err = window.GetSurface()
-		if err != nil {
-			panic(err)
-		}
-		
-		win_surface = surf
-		big_surface = surface.Surface(int(win_surface.W),int(win_surface.H))
-
-		
+    
+    
+    renderer, err = sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to create renderer: %s\n", err)
+        return
+    }
+    
+    big_surface = surface.Surface(int(w),int(h))
+    texture,err =  renderer.CreateTextureFromSurface(big_surface)
+    if err != nil {
+      panic(err)
+    }
 	})
 
 	return big_surface
 }
 
-func UpdateWindowSurface() {
-  sdl.Do(func(){
-    if win_surface != nil && big_surface != nil {
-      surface.Blit(win_surface,big_surface, nil,nil)
-    }
-  })
-}
-
-func UpdateWindow() {
-  sdl.Do(func() {
-		if window != nil {
-			window.UpdateSurface()
-		}
-  })
-}
-
 func Flip() {
 	sdl.Do(func() {
-  	if win_surface != nil && big_surface != nil {
-			surface.Blit(win_surface,big_surface, nil,nil)
-		}
-		if window != nil {
-			window.UpdateSurface()
-		}
+    texture.Update(nil,big_surface.Pixels(),int(big_surface.Pitch))
+    renderer.Clear()
+    renderer.Copy(texture, nil,nil)
+    renderer.Present()
 	})
 }
 		
